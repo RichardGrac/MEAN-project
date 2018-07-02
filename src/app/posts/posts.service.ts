@@ -28,7 +28,8 @@ export class PostsService {
           return {
             title: post.title,
             content: post.content,
-            id: post._id
+            id: post._id,
+            imagePath: post.imagePath
           };
         });
       }))
@@ -45,35 +46,58 @@ export class PostsService {
 
   getPost(id: string) {
     // return {...this.posts.find(p => p.id === id)};
-    return this.http.get<{_id: string, title: string, content: string}>
+    return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>
     (this.URL + '/' + id);
   }
 
-  addPost(title: string, content: string) {
+  addPost(title: string, content: string, image: File) {
     console.log('Adding Post...');
-    const post: Post = {id: null, title: title, content: content};
-    this.http.post<{ message: string, postId: string }>(this.URL, post)
+    // Combina valores de Texto y BLOB's
+    const postData = new FormData();
+    postData.append('title', title);
+    postData.append('content', content);
+    postData.append('image', image, title);
+    this.http.post<{ message: string, post: Post }>(this.URL, postData)
       .subscribe((responseData) => {
         // Seteamos el id que se autogenero en el servidor
-        post.id = responseData.postId;
+        const post: Post = {
+          id: responseData.post.id,
+          title: title,
+          content: content,
+          imagePath: responseData.post.imagePath
+        };
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
+        // Ir a componente raíz
+        this.router.navigate(['/']);
       });
-    this.router.navigate(['/']);
   }
 
-  updatePost(id: string, title: string, content: string) {
-    const post: Post = {id: id, title: title, content: content};
+  updatePost(id: string, title: string, content: string, image: File | string ) {
+    let postData: Post | FormData;
+    if (typeof image === 'object') {
+      postData = new FormData();
+      postData.append('id', id);
+      postData.append('title', title);
+      postData.append('content', content);
+      postData.append('image', image, title);
+    } else {
+      postData = {id: id, title: title, content: content, imagePath: image};
+    }
+    // const post: Post = {id: id, title: title, content: content, imagePath: null };
     this.http
-      .put(this.URL + '/' + id, post)
+      .put(this.URL + '/' + id, postData)
       .subscribe(response => {
         const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
+        const oldPostIndex = updatedPosts.findIndex(p => p.id === id);
+        const post: Post = {
+          id: id, title: title, content: content, imagePath: ''
+        };
         updatedPosts[oldPostIndex] = post;
         this.posts = updatedPosts;
         this.postsUpdated.next([...this.posts]);
+        this.router.navigate(['/']);
       });
-    this.router.navigate(['/']);
   }
 
   deletePost(postId: string) {

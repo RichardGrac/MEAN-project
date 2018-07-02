@@ -1,3 +1,4 @@
+const path = require ('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -17,6 +18,8 @@ mongoose.connect('mongodb+srv://richard:pfGnVBhmcXM0VyFV@cluster0-dbuxt.mongodb.
 /* Para todas las peticiones entrantes, convertir la Petición en formato JSON */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use('/images', express.static(path.join('backend/images'))); // Cualquier Petición que quiera usar esta ruta, será permitida
+
 
 /* Para todas las peticiones entrantes, agregamos los headers (CORS) */
 app.use((req, res, next) => {

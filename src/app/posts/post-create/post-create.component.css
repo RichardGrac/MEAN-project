@@ -10,3 +10,36 @@ button {
 mat-spinner {
   margin: auto;
 }
+
+input[type="file"] {
+  visibility: hidden;
+}
+
+.inline {
+  /*float: right;*/
+  display: inline;
+  margin-left: 1rem;
+}
+
+.image-preview {
+  /*height: auto;*/
+  margin: 2rem;
+  text-align: center;
+}
+
+.image-preview img {
+  /*height: 100%;*/
+  border-radius: 10px 10px 10px 10px;
+  width: 60%;
+}
+
+.fill-space {
+  flex: 1 1 auto;
+}
+
+.message {
+  color: grey;
+  font-size: 20px;
+  margin: 2rem auto;
+  text-align: center;
+}

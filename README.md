@@ -1,4 +1,12 @@
-# MeanCourse
+# MEAN Project
+
+<u>Descripción</u>: 'Blog' de Posts con subida de imagenes. CRUD de Posts con Base de Datos en AWS mediante MongoDB Atlas.
+
+<u>Front</u>: $ ng serve # En localhost:4200
+
+<u>Back</u>: $ ng run start:server # En localhost:3000
+
+# About
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 

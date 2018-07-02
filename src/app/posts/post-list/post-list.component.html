@@ -3,14 +3,23 @@
   <mat-expansion-panel *ngFor="let post of posts">
 
     <mat-expansion-panel-header>
-      {{ post.title }}
+      <span class="font-backgnd">Titulo: </span>
+      <p>{{ post.title }}</p>
     </mat-expansion-panel-header>
-    <p> {{ post.content }}</p>
 
     <mat-action-row>
       <a mat-button mat-raised-button color="primary" [routerLink]="['/editar', post.id]">Editar</a>
       <button mat-button mat-raised-button color="warn" (click)="onDelete(post.id)">Eliminar</button>
     </mat-action-row>
+
+    <div class="image-preview">
+      <img [src]="post.imagePath" [alt]="post.title">
+    </div>
+
+    <p>
+      <span class="font-backgnd">Descripción: </span>
+      {{ post.content }}
+    </p>
 
   </mat-expansion-panel>
 </mat-accordion>
